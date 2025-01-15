@@ -45,7 +45,7 @@ pico_enable_stdio_uart(pico-tcp 0)
 pico_enable_stdio_usb(pico-tcp 1) # Ative essa opção para monitorar entradas e saídas seriais
 
 # Add the standard library to the build
-target_link_libraries(pico-tcp
+target_link_libraries(pico-tcp PRIVATE
         pico_stdlib)
 
 # Add the standard include files to the build
@@ -54,7 +54,7 @@ target_include_directories(pico-tcp PRIVATE
 )
 
 # Add any user requested libraries
-target_link_libraries(pico-tcp 
+target_link_libraries(pico-tcp PRIVATE
         pico_cyw43_arch_lwip_threadsafe_background
         )
 
