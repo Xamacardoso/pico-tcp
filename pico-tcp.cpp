@@ -78,14 +78,9 @@ void tcp_server(void) {
     printf("Servidor TCP iniciado na porta %d.\n", SERVER_PORT);
 }
 
-// Função para configurar o sistema de tempo do LWIP
-void sys_init_timeouts(void) {
-    // Configuração de temporizadores
-    printf("Configurando temporizadores...\n");
-    sys_timeouts_init();
-}
 // Função principal
 int main() {
+    // Inicializar entradas e saídas padrão
     stdio_init_all();
 
     // Inicializar LED RGB
@@ -96,14 +91,11 @@ int main() {
     gpio_set_dir(LED_G_PIN, GPIO_OUT);
     gpio_set_dir(LED_B_PIN, GPIO_OUT);
 
-    
-    sleep_ms(1000);
-
-    printf("Display inicializado!\n");
-    
+    sleep_ms(1000);    
 
     char message[50] = "Conectando a ";
     strcat(message, WIFI_SSID);
+    printf("%s\n", message);
     
     printf("Iniciando WiFi...\n");
     gpio_put(LED_R_PIN, 1);
@@ -112,16 +104,20 @@ int main() {
 
     // Inicializar a interface WiFi e conectar-se
     cyw43_arch_init();
-    cyw43_arch_enable_sta_mode();
+
+    // Definir o modo de estabelecimento de conexão como se fosse um dispositivo qualquer. Ex: telefone, tablet...
+    cyw43_arch_enable_sta_mode(); 
     if (cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 30000)) {
         printf("Falha ao conectar ao WiFi.\n");
         gpio_put(LED_G_PIN, 0);
+
     }else{
         printf("Conectado ao WiFi.\n");
-        // Read the IP address in a human-readable way
+        
+        // Exibe o endereço IP de maneira legível
         uint8_t *ip_address = (uint8_t*)&(cyw43_state.netif[0].ip_addr.addr);
         printf("IP address %d.%d.%d.%d\n", ip_address[0], ip_address[1], ip_address[2], ip_address[3]);
-        char *ip_addr_str = ip4addr_ntoa(&cyw43_state.netif[0].ip_addr);
+
         gpio_put(LED_R_PIN, 0);
     };
     
@@ -131,7 +127,6 @@ int main() {
     // Iniciar o servidor TCP
     tcp_server();
 
-    // Loop principal de processamento do LWIP
     while (1) {
         // sleep_ms(100);  // Garantir que o loop não sobrecarregue o processador
         tight_loop_contents();
