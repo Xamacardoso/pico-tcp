@@ -6,8 +6,8 @@
 #include "lwip/timeouts.h"
 
 // DEFINIÇÕES DE REDE WIFI
-#define WIFI_SSID "HUAWEI-2.4G-S7mw"
-#define WIFI_PASSWORD "labirasifpi"
+#define WIFI_SSID "YOUR_SSID"
+#define WIFI_PASSWORD "YOUR_PASSWORD"
 #define SERVER_PORT 8050
 
 // LED RGB
